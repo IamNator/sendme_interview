@@ -7,7 +7,7 @@ type Transaction struct {
 	gorm.Model
 	// TransactionID uint    `json:"transaction_id" validate:"required"`
 	UserID uint    `json:"user_id" validate:"required"`
-	Type   string  `json:"type" validate:"required" gorm:"type:enum('credit','debit')"` //enum("debit", "credit")
+	Type   string  `json:"type" validate:"required"` //enum("debit", "credit")
 	Amount float64 `json:"amount" validate:"required"`
 }
 
