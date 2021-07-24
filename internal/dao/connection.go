@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/IamNator/sendme_interview/config"
-	"github.com/IamNator/sendme_interview/internal/schema"
 	"github.com/IamNator/sendme_interview/logger"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -34,10 +33,6 @@ func init() {
 		log.Fatal(er.Error() + " \nunable to connect to database")
 		return
 	}
-
-	// dao.Table(schema.User{}.TableName()).AutoMigrate(&schema.User{})
-	// dao.Table(schema.Transaction{}.TableName()).AutoMigrate(&schema.Transaction{})
-	dao.Table(schema.Wallet{}.TableName()).AutoMigrate(&schema.Wallet{})
 
 	PostGres = dao
 
