@@ -21,4 +21,5 @@ type LoginResponse struct {
 	LastName  string `json:"last_name" validate:"required"`
 	Username  string `json:"username" validate:"required"`
 	Email     string `json:"email"  validate:"required"`
+	Token     string `json:"token" validate:"token"`
 }
