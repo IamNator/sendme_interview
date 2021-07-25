@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/IamNator/sendme_interview/config"
-	"github.com/IamNator/sendme_interview/internal/dao"
+	dao "github.com/IamNator/sendme_interview/internal/db"
 	"github.com/IamNator/sendme_interview/logger"
 	"github.com/IamNator/sendme_interview/middleware"
 	"github.com/IamNator/sendme_interview/router"
