@@ -91,6 +91,12 @@ func (u User) LoginUser(credentials models.LoginCredential) (*models.LoginRespon
 		First(&usr).
 		First(&response)
 
+	if result.RowsAffected < 1 {
+
+		return nil, fmt.Errorf("password or username incorrect")
+
+	}
+
 	if result.Error != nil {
 		return nil, result.Error
 	}

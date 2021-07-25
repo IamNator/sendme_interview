@@ -22,7 +22,7 @@ type User interface {
 type Transaction interface {
 	DebitUser(debit models.DebitUser) (*schema.Wallet, error)
 	CreditUser(credit models.CreditUser) (*schema.Wallet, error)
-	TransactionHistory(userID uint) (*schema.Transaction, error)
+	TransactionHistory(userID uint) ([]*schema.Transaction, error)
 	WalletBalance(userID uint) (*schema.Wallet, error)
 }
 

@@ -91,13 +91,13 @@ func (t Transaction) WalletBalance(userID uint) (*schema.Wallet, error) {
 	return &wallet, nil
 }
 
-func (t Transaction) TransactionHistory(userID uint) (*schema.Transaction, error) {
+func (t Transaction) TransactionHistory(userID uint) ([]*schema.Transaction, error) {
 
-	var transHist schema.Transaction
-	result := t.DB.Table(transHist.TableName()).Where("user_id = ?").Find(&transHist)
+	var transHist []*schema.Transaction
+	result := t.DB.Table(schema.Transaction{}.TableName()).Where("user_id = ?").Find(&transHist)
 	if er := result.Error; er != nil {
 		return nil, er
 	}
 
-	return &transHist, nil
+	return transHist, nil
 }
