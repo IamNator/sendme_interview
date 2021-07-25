@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
+	"os"
 
-	"github.com/IamNator/sendme_interview/config"
 	"github.com/IamNator/sendme_interview/internal/dao"
 	"github.com/IamNator/sendme_interview/logger"
 	"github.com/IamNator/sendme_interview/middleware"
@@ -13,7 +13,7 @@ import (
 func main() {
 
 	routes := router.Routes(dao.PostGres)
-	port := config.Config.PORT
+	port := os.Getenv("PORT")
 	logger.Logger.Println("server running on port :" + port)
 
 	http.ListenAndServe(":"+port, middleware.CorHandler(routes))
