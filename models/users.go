@@ -8,7 +8,7 @@ type LoginCredential struct {
 
 //RegistrationCredential is used for registration
 type RegistrationCredential struct {
-	UserName string `json:"username" validate:"required"`
+	Username string `json:"username" validate:"required"`
 	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }

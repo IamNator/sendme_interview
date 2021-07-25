@@ -73,7 +73,7 @@ func (u User) RegisterNewUser(credentials models.RegistrationCredential) (*model
 	usr.Token = CreateToken(credentials.Password)
 	usr.TokenExpiration = time.Now().Add(TokenLifeTime) //3 hours to token expiration
 
-	result := u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.UserName).FirstOrCreate(&usr).First(&response)
+	result := u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.Username).FirstOrCreate(&usr).First(&response)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -87,7 +87,7 @@ func (u User) LoginUser(credentials models.LoginCredential) (*models.LoginRespon
 	var response models.LoginResponse
 
 	var usr schema.User
-	result := u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.UserName).
+	result := u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.Username).
 		First(&usr).
 		First(&response)
 
@@ -106,7 +106,7 @@ func (u User) LoginUser(credentials models.LoginCredential) (*models.LoginRespon
 		return nil, fmt.Errorf("password or username incorrect")
 	}
 
-	result = u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.UserName).
+	result = u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.Username).
 		Update(map[string]interface{}{"token_expiration": time.Now().Add(TokenLifeTime)}) //token expires TokenLifeTime after login
 	if result.Error != nil {
 		return nil, result.Error

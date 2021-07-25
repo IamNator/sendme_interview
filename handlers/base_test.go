@@ -43,7 +43,7 @@ func (u user) RegisterNewUser(credentials models.RegistrationCredential) (*model
 	json.Unmarshal(by, &usr)
 	usr.HashedPassword = hashAndSalt(credentials.Password)
 	usr.ID = uint(r.Uint32())
-	u.DB[usr.UserName] = usr
+	u.DB[usr.Username] = usr
 
 	var output models.LoginResponse
 	json.Unmarshal(by, &output)
@@ -97,7 +97,7 @@ var testLogin = []struct {
 			Want                    models.LoginResponse
 		}{
 			RegistrationRequestBody: models.RegistrationCredential{
-				UserName: "bobby",
+				Username: "bobby",
 				Email:    "bobby@gmail.com",
 				Password: "hosty",
 			},
