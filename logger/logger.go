@@ -26,9 +26,15 @@ func init() {
 
 	Warn = log.New()
 	Warn.Level = logrus.WarnLevel
+	Warn.WithFields(logrus.Fields{
+		"appname": "sendme_interview",
+	})
 
 	Fatal = log.New()
 	Fatal.Level = logrus.FatalLevel
+	Fatal.WithFields(logrus.Fields{
+		"appname": "sendme_interview",
+	})
 
 	//log.SetOutput(OpenLogfile())
 
