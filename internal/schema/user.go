@@ -10,7 +10,7 @@ type User struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `json:"deleted_at" sql:"index"`
-	UserName        string     `json:"username"`
+	Username        string     `json:"username"`
 	Email           string     `json:"email"`
 	HashedPassword  string     `json:"hashed_password"  validate:"required"`
 	Token           string     `json:"token"`
