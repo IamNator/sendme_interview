@@ -1,0 +1,1 @@
+web: bin/sendme_interview
