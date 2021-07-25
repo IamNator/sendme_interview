@@ -42,7 +42,7 @@ func (u user) RegisterNewUser(credentials models.RegistrationCredential) (*model
 	var usr schema.User
 	json.Unmarshal(by, &usr)
 	usr.HashedPassword = hashAndSalt(credentials.Password)
-	usr.ID = uint(r.Uint32())
+	usr.ID = r.Int()
 	u.DB[usr.Username] = usr
 
 	var output models.LoginResponse
@@ -144,7 +144,7 @@ func (t *transaction) DebitUser(debit models.DebitUser) (*schema.Wallet, error) 
 		t.DB.Wallet[debit.UserID] = wallet
 
 		t.DB.Transaction[debit.UserID] = append(t.DB.Transaction[debit.UserID], schema.Transaction{
-			UserID: uint(debit.UserID),
+			UserID: debit.UserID,
 			Amount: debit.Amount,
 			Type:   "debit",
 			ID:     uint(r.Uint32()),
@@ -177,7 +177,7 @@ func (t *transaction) CreditUser(credit models.CreditUser) (*schema.Wallet, erro
 
 		// } else {
 		t.DB.Transaction[credit.UserID] = append(t.DB.Transaction[credit.UserID], schema.Transaction{
-			UserID: uint(credit.UserID),
+			UserID: credit.UserID,
 			Amount: credit.Amount,
 			Type:   "credit",
 			ID:     uint(r.Uint32()),

@@ -15,6 +15,7 @@ type RegistrationCredential struct {
 
 //LoginResponse is the response after a successful login or registration
 type LoginResponse struct {
+	ID       int    `json:"user_id"`
 	Username string `json:"username" validate:"required"`
 	Email    string `json:"email"  validate:"required"`
 	Token    string `json:"token" validate:"token"`

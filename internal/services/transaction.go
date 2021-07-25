@@ -36,7 +36,7 @@ func (t Transaction) DebitUser(debit models.DebitUser) (*schema.Wallet, error) {
 
 	var transactionLog schema.Transaction
 	transactionLog.Type = "debit"
-	transactionLog.UserID = uint(debit.UserID)
+	transactionLog.UserID = debit.UserID
 	transactionLog.Amount = debit.Amount
 	//	transactionLog.TransactionID = uint(debit.TransactionID)
 
@@ -51,6 +51,8 @@ func (t Transaction) DebitUser(debit models.DebitUser) (*schema.Wallet, error) {
 func (t Transaction) CreditUser(credit models.CreditUser) (*schema.Wallet, error) {
 
 	var wallet schema.Wallet
+	wallet.Balance = 0
+	wallet.UserID = credit.UserID
 	result := t.DB.Table(wallet.TableName()).FirstOrCreate(&wallet)
 	if er := result.Error; er != nil {
 		return nil, er
@@ -58,7 +60,7 @@ func (t Transaction) CreditUser(credit models.CreditUser) (*schema.Wallet, error
 
 	if bal := (wallet.Balance + credit.Amount); bal > -1 {
 		wallet.Balance = bal
-		result := t.DB.Table(wallet.TableName()).Where("user_id = ?", credit.UserID).Update(&wallet).First(&wallet)
+		result := t.DB.Table(wallet.TableName()).Where("user_id = ?", credit.UserID).Update(&wallet)
 		if er := result.Error; er != nil {
 			return nil, er
 		}
@@ -68,11 +70,11 @@ func (t Transaction) CreditUser(credit models.CreditUser) (*schema.Wallet, error
 
 	var transactionLog schema.Transaction
 	transactionLog.Type = "credit"
-	transactionLog.UserID = uint(credit.UserID)
+	transactionLog.UserID = credit.UserID
 	transactionLog.Amount = credit.Amount
 	//	transactionLog.TransactionID = uint(debit.TransactionID)
 
-	result = t.DB.Table(transactionLog.TableName()).Save(&transactionLog)
+	result = t.DB.Table(transactionLog.TableName()).Create(&transactionLog)
 	if er := result.Error; er != nil {
 		return nil, er
 	}
@@ -83,7 +85,7 @@ func (t Transaction) CreditUser(credit models.CreditUser) (*schema.Wallet, error
 func (t Transaction) WalletBalance(userID uint) (*schema.Wallet, error) {
 
 	var wallet schema.Wallet
-	result := t.DB.Table(wallet.TableName()).Where("user_id = ?").First(&wallet)
+	result := t.DB.Table(wallet.TableName()).Where("user_id = ?", userID).First(&wallet)
 	if er := result.Error; er != nil {
 		return nil, er
 	}
@@ -94,7 +96,7 @@ func (t Transaction) WalletBalance(userID uint) (*schema.Wallet, error) {
 func (t Transaction) TransactionHistory(userID uint) ([]*schema.Transaction, error) {
 
 	var transHist []*schema.Transaction
-	result := t.DB.Table(schema.Transaction{}.TableName()).Where("user_id = ?").Find(&transHist)
+	result := t.DB.Table(schema.Transaction{}.TableName()).Where("user_id = ?", userID).Find(&transHist)
 	if er := result.Error; er != nil {
 		return nil, er
 	}

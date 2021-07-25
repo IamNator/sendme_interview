@@ -51,12 +51,20 @@ func ValidateToken(db *gorm.DB) func(next http.Handler) http.Handler {
 			result := db.Table(schema.User{}.TableName()).Where("token = ?", token).
 				First(&user)
 
-			if result.RowsAffected < 1 {
-				httperror.Default(fmt.Errorf("Unauthorized Access")).ReplyUnauthorizedResponse(w)
+			if result.RecordNotFound() {
+				httperror.Default(fmt.Errorf("Unauthorized Access -")).ReplyUnauthorizedResponse(w)
 				return
 			}
 
-			if user.TokenExpiration.After(time.Now()) {
+			ttmp, er := time.Parse("2006-01-02 3:04PM", user.TokenExpiration)
+			if er != nil {
+
+				httperror.Default(er).ReplyInternalServerError(w)
+				return
+			}
+
+			if ttmp.Before(time.Now()) {
+
 				httperror.Default(fmt.Errorf("Unauthorized Access")).ReplyUnauthorizedResponse(w)
 				return
 			}

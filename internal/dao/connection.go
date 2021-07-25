@@ -6,7 +6,9 @@ import (
 	"github.com/IamNator/sendme_interview/config"
 	"github.com/IamNator/sendme_interview/logger"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+
+	//	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/lib/pq"
 )
 
 //PostGres ...

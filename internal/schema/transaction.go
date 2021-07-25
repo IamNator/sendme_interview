@@ -8,11 +8,11 @@ type Transaction struct {
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
 	DeletedAt *time.Time `json:"deleted_at" sql:"index"`
-	UserID    uint       `json:"user_id" validate:"required"`
+	UserID    int        `json:"user_id" validate:"required"`
 	Type      string     `json:"type" validate:"required"` //enum("debit", "credit")
 	Amount    float64    `json:"amount" validate:"required"`
 }
 
 func (Transaction) TableName() string {
-	return "user"
+	return "transaction"
 }

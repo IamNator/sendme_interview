@@ -1,7 +1,6 @@
 package services
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand"
@@ -60,20 +59,14 @@ func (u User) RegisterNewUser(credentials models.RegistrationCredential) (*model
 	var response models.LoginResponse
 
 	var usr schema.User
-	by, er := json.Marshal(credentials)
-	if er != nil {
-		return nil, er
-	}
-	er = json.Unmarshal(by, &usr)
-	if er != nil {
-		return nil, er
-	}
-
+	usr.Username = credentials.Username
+	usr.Email = credentials.Email
+	usr.ID = 0
 	usr.HashedPassword = hashAndSalt(credentials.Password)
 	usr.Token = CreateToken(credentials.Password)
-	usr.TokenExpiration = time.Now().Add(TokenLifeTime) //3 hours to token expiration
+	usr.TokenExpiration = time.Now().Add(TokenLifeTime).Format("2006-01-02 3:04PM") //3 hours to token expiration
 
-	result := u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.Username).FirstOrCreate(&usr).First(&response)
+	result := u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.Username).Create(&usr).First(&response)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -87,13 +80,13 @@ func (u User) LoginUser(credentials models.LoginCredential) (*models.LoginRespon
 	var response models.LoginResponse
 
 	var usr schema.User
-	result := u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.Username).
+	result := u.DB.Table(schema.User{}.TableName()).Where("username = ?", credentials.Username).
 		First(&usr).
 		First(&response)
 
-	if result.RowsAffected < 1 {
+	if result.RecordNotFound() {
 
-		return nil, fmt.Errorf("password or username incorrect")
+		return nil, fmt.Errorf("password or username incorrect-")
 
 	}
 
@@ -107,7 +100,7 @@ func (u User) LoginUser(credentials models.LoginCredential) (*models.LoginRespon
 	}
 
 	result = u.DB.Table(schema.User{}.TableName()).Where("username = ?", usr.Username).
-		Update(map[string]interface{}{"token_expiration": time.Now().Add(TokenLifeTime)}) //token expires TokenLifeTime after login
+		Update(map[string]interface{}{"token_expiration": time.Now().Add(TokenLifeTime).Format("2006-01-02 3:04PM")}).Find(&response) //token expires TokenLifeTime after login
 	if result.Error != nil {
 		return nil, result.Error
 	}
