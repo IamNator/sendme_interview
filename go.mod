@@ -2,6 +2,8 @@ module github.com/IamNator/sendme_interview
 
 go 1.16
 
+// +heroku goVersion go1.16
+
 require (
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible
